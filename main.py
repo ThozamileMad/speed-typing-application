@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import messagebox, TclError
-from time import sleep
 from PIL import ImageTk, Image
 from random import choice
 
@@ -45,35 +44,12 @@ def countdown(count):
                     "The user was unable to finish the test under the allocated time.")
 
 
-def check_spelling(user_input):
-    user_input_lst = user_input.split()
-    writing_lst = test_label["text"].split()
-    not_valid = False
-
-    for num in range(len(user_input_lst)):
-        user_word = user_input_lst[num]
-        writing_word = writing_lst[num]
-        for num2 in range(len(user_word)):
-            user_let = user_word[num2]
-            writing_let = writing_word[num2]
-            if user_let != writing_let:
-                not_valid = True
-            elif user_let == " " and user_word[num2 - 1] != writing_word[num2 - 1]:
-                not_valid = True
-
-    if not_valid:
-        textbox.config(fg="red")
-    else:
-        textbox.config(fg="black")
-
-
 def text_counter(e):
     global wps_count
     let_sym_num = list("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!~@#$%^&*()_-+=[{]}|\:;'?/>.<,")
     user_input = textbox.get(1.0, END + "-1c") + e.char
     writing = test_label["text"]
     try:
-        check_spelling(user_input)
         if user_input[-1] not in let_sym_num and user_input[-1] != " ":
             user_input = user_input[:-2]
         elif user_input.split() != writing.split():
@@ -131,6 +107,10 @@ textbox.grid(row=3, column=1)
 
 start_but = Button(text="Start Speed Test", command=lambda : [countdown(60), textbox.config(state="normal")], width=15)
 start_but.grid(row=4, column=1)
+
+textbox.bind("<Key>", text_counter)
+
+window.mainloop()
 
 textbox.bind("<Key>", text_counter)
 
